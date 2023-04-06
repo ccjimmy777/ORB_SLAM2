@@ -1,4 +1,15 @@
 /**
+ * @file LoopClosing.h
+ * @author guoqing (1337841346@qq.com)
+ * @brief 回环检测线程
+ * @version 0.1
+ * @date 2019-05-05
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
+
+/**
 * This file is part of ORB-SLAM2.
 *
 * Copyright (C) 2014-2016 Raúl Mur-Artal <raulmur at unizar dot es> (University of Zaragoza)
@@ -45,9 +56,16 @@ class LoopClosing
 {
 public:
 
-    typedef pair<set<KeyFrame*>,int> ConsistentGroup;    
-    typedef map<KeyFrame*,g2o::Sim3,std::less<KeyFrame*>,
-        Eigen::aligned_allocator<std::pair<const KeyFrame*, g2o::Sim3> > > KeyFrameAndPose;
+    // 自定义数据类型, ConsistentGroup.first对应每个“连续组”中的关键帧，ConsistentGroup.second为每个“连续组”的序号
+    typedef pair<set<KeyFrame*>,int> ConsistentGroup;
+    
+    // 存储关键帧对象和位姿的键值对，这里是map的完整构造函数
+    typedef map<KeyFrame*,                  // key
+        g2o::Sim3,                          // value
+        std::less<KeyFrame*>,               // sorting algorithm
+        Eigen::aligned_allocator<std::pair<KeyFrame* const, g2o::Sim3>>  // 指定分配器，和内存空间开辟有关。
+                                                                         // 为了能够使用Eigen库中的SSE和AVX指令集加速,需要将传统STL容器中的数据进行对齐处理
+        > KeyFrameAndPose;
 
 public:
 

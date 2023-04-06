@@ -1,0 +1,20 @@
+{
+    "env": {
+        "OpenCVPath": "${userHome}/softwares/opencv/install/4.7.0"
+    },
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${OpenCVPath}/include/**"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c17",
+            "cppStandard": "gnu++14",
+            "intelliSenseMode": "linux-gcc-x64"
+        }
+    ],
+    "version": 4
+}

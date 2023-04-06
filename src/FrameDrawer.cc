@@ -1,4 +1,15 @@
 /**
+ * @file FrameDrawer.cc
+ * @author guoqing (1337841346@qq.com)
+ * @brief 帧绘制器
+ * @version 0.1
+ * @date 2019-02-19
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
+
+/**
 * This file is part of ORB-SLAM2.
 *
 * Copyright (C) 2014-2016 Raúl Mur-Artal <raulmur at unizar dot es> (University of Zaragoza)
@@ -20,6 +31,9 @@
 
 #include "FrameDrawer.h"
 #include "Tracking.h"
+#ifdef OPENCV4
+#include <opencv2/imgproc/types_c.h>
+#endif
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>

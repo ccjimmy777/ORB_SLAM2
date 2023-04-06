@@ -1,4 +1,15 @@
 /**
+ * @file LocalMapping.cc
+ * @author guoqing (1337841346@qq.com)
+ * @brief 局部建图线程
+ * @version 0.1
+ * @date 2019-04-29
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
+
+/**
 * This file is part of ORB-SLAM2.
 *
 * Copyright (C) 2014-2016 Raúl Mur-Artal <raulmur at unizar dot es> (University of Zaragoza)
@@ -23,27 +34,40 @@
 #include "ORBmatcher.h"
 #include "Optimizer.h"
 
-#include<mutex>
+#include <mutex>
 
 namespace ORB_SLAM2
 {
-
+// 构造函数
 LocalMapping::LocalMapping(Map *pMap, const float bMonocular):
     mbMonocular(bMonocular), mbResetRequested(false), mbFinishRequested(false), mbFinished(true), mpMap(pMap),
     mbAbortBA(false), mbStopped(false), mbStopRequested(false), mbNotStop(false), mbAcceptKeyFrames(true)
 {
+    /*
+     * mbStopRequested：    外部线程调用，为true，表示外部线程请求停止 local mapping
+     * mbStopped：          为true表示可以并终止localmapping 线程
+     * mbNotStop：          true，表示不要停止 localmapping 线程，因为要插入关键帧了。需要和 mbStopped 结合使用
+     * mbAcceptKeyFrames：  true，允许接受关键帧。tracking 和local mapping 之间的关键帧调度
+     * mbAbortBA：          是否流产BA优化的标志位
+     * mbFinishRequested：  请求终止当前线程的标志。注意只是请求，不一定终止。终止要看 mbFinished
+     * mbResetRequested：   请求当前线程复位的标志。true，表示一直请求复位，但复位还未完成；表示复位完成为false
+     * mbFinished：         判断最终LocalMapping::Run() 是否完成的标志。
+     */
 }
 
+// 设置回环检测线程句柄
 void LocalMapping::SetLoopCloser(LoopClosing* pLoopCloser)
 {
     mpLoopCloser = pLoopCloser;
 }
 
+// 设置追踪线程句柄
 void LocalMapping::SetTracker(Tracking *pTracker)
 {
     mpTracker=pTracker;
 }
 
+// 线程主函数
 void LocalMapping::Run()
 {
 
@@ -91,7 +115,8 @@ void LocalMapping::Run()
             // Safe area to stop
             while(isStopped() && !CheckFinish())
             {
-                usleep(3000);
+                // usleep(3000);
+                std::this_thread::sleep_for(std::chrono::milliseconds(3));
             }
             if(CheckFinish())
                 break;
@@ -105,12 +130,14 @@ void LocalMapping::Run()
         if(CheckFinish())
             break;
 
-        usleep(3000);
+        // usleep(3000);
+        std::this_thread::sleep_for(std::chrono::milliseconds(3));
     }
 
     SetFinish();
 }
 
+// 插入关键帧,由外部（Tracking）线程调用;这里只是插入到列表中,等待线程主函数对其进行处理
 void LocalMapping::InsertKeyFrame(KeyFrame *pKF)
 {
     unique_lock<mutex> lock(mMutexNewKFs);
@@ -716,7 +743,8 @@ void LocalMapping::RequestReset()
             if(!mbResetRequested)
                 break;
         }
-        usleep(3000);
+        // usleep(3000);
+        std::this_thread::sleep_for(std::chrono::milliseconds(3));
     }
 }
 

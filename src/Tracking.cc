@@ -20,7 +20,9 @@
 
 
 #include "Tracking.h"
-
+#ifdef OPENCV4
+#include<opencv2/imgproc/types_c.h>
+#endif
 #include<opencv2/core/core.hpp>
 #include<opencv2/features2d/features2d.hpp>
 
@@ -1509,7 +1511,8 @@ void Tracking::Reset()
     {
         mpViewer->RequestStop();
         while(!mpViewer->isStopped())
-            usleep(3000);
+            // usleep(3000);
+            std::this_thread::sleep_for(std::chrono::milliseconds(3));
     }
 
     // Reset Local Mapping

@@ -1,4 +1,15 @@
 /**
+ * @file Viewer.cc
+ * @author guoqing (1337841346@qq.com)
+ * @brief 查看器的实现
+ * @version 0.1
+ * @date 2019-02-19
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
+
+/**
 * This file is part of ORB-SLAM2.
 *
 * Copyright (C) 2014-2016 Raúl Mur-Artal <raulmur at unizar dot es> (University of Zaragoza)
@@ -157,7 +168,8 @@ void Viewer::Run()
         {
             while(isStopped())
             {
-                usleep(3000);
+                // usleep(3000);
+                std::this_thread::sleep_for(std::chrono::milliseconds(3));
             }
         }
 

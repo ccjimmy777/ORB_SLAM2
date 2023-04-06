@@ -1,4 +1,15 @@
 /**
+ * @file LoopClosing.cc
+ * @author guoqing (1337841346@qq.com)
+ * @brief 回环检测线程
+ * @version 0.1
+ * @date 2019-05-05
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
+
+/**
 * This file is part of ORB-SLAM2.
 *
 * Copyright (C) 2014-2016 Raúl Mur-Artal <raulmur at unizar dot es> (University of Zaragoza)
@@ -81,7 +92,8 @@ void LoopClosing::Run()
         if(CheckFinish())
             break;
 
-        usleep(5000);
+        // usleep(5000);
+        std::this_thread::sleep_for(std::chrono::milliseconds(5));
     }
 
     SetFinish();
@@ -425,7 +437,8 @@ void LoopClosing::CorrectLoop()
     // Wait until Local Mapping has effectively stopped
     while(!mpLocalMapper->isStopped())
     {
-        usleep(1000);
+        // usleep(1000);
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }
 
     // Ensure current keyframe is updated
@@ -627,7 +640,8 @@ void LoopClosing::RequestReset()
         if(!mbResetRequested)
             break;
         }
-        usleep(5000);
+        // usleep(5000);
+        std::this_thread::sleep_for(std::chrono::milliseconds(5));
     }
 }
 
@@ -667,7 +681,8 @@ void LoopClosing::RunGlobalBundleAdjustment(unsigned long nLoopKF)
 
             while(!mpLocalMapper->isStopped() && !mpLocalMapper->isFinished())
             {
-                usleep(1000);
+                // usleep(1000);
+                std::this_thread::sleep_for(std::chrono::milliseconds(1));
             }
 
             // Get Map Mutex

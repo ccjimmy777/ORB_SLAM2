@@ -1,4 +1,15 @@
 /**
+ * @file Sim3Solver.cc
+ * @author guoqing (1337841346@qq.com)
+ * @brief sim3 求解器
+ * @version 0.1
+ * @date 2019-05-07
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
+
+/**
 * This file is part of ORB-SLAM2.
 *
 * Copyright (C) 2014-2016 Raúl Mur-Artal <raulmur at unizar dot es> (University of Zaragoza)
@@ -24,6 +35,9 @@
 #include <vector>
 #include <cmath>
 #include <opencv2/core/core.hpp>
+#ifdef OPENCV4
+#include <opencv2/core/core_c.h>
+#endif
 
 #include "KeyFrame.h"
 #include "ORBmatcher.h"
@@ -33,7 +47,13 @@
 namespace ORB_SLAM2
 {
 
-
+ /**
+ * @brief Sim 3 Solver 构造函数
+ * @param[in] pKF1              当前关键帧
+ * @param[in] pKF2              候选的闭环关键帧
+ * @param[in] vpMatched12       通过词袋模型加速匹配所得到的,两帧特征点的匹配关系所得到的地图点,本质上是来自于候选闭环关键帧的地图点
+ * @param[in] bFixScale         当前传感器类型的输入需不需要计算尺度。单目的时候需要，双目和RGBD的时候就不需要了
+ */
 Sim3Solver::Sim3Solver(KeyFrame *pKF1, KeyFrame *pKF2, const vector<MapPoint *> &vpMatched12, const bool bFixScale):
     mnIterations(0), mnBestInliers(0), mbFixScale(bFixScale)
 {
